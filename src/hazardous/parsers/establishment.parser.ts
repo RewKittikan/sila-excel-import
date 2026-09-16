@@ -1,5 +1,10 @@
-import { Worksheet } from 'exceljs';
-import { HazardousImportRow } from '../interfaces/hazardous-import-row.interface';
+import { Row, Worksheet } from 'exceljs';
+import {
+  EstablishmentStatus,
+  HazardousImportRow,
+  HazardousPayment,
+  PaymentStatus,
+} from '../interfaces/hazardous-import-row.interface';
 
 export class EstablishmentParser {
   parse(worksheet: Worksheet): HazardousImportRow[] {
@@ -8,6 +13,7 @@ export class EstablishmentParser {
     worksheet.eachRow((row) => {
       const sequence = row.getCell(1).value;
 
+      // รับเฉพาะแถวข้อมูลจริง
       if (typeof sequence !== 'number') {
         return;
       }
@@ -15,6 +21,7 @@ export class EstablishmentParser {
       const ownerName = this.toText(row.getCell(2).value);
       const establishmentName = this.toText(row.getCell(3).value);
 
+      // ถ้าไม่มีทั้งผู้ประกอบการและชื่อสถานประกอบการ ให้ข้าม
       if (!ownerName && !establishmentName) {
         return;
       }
@@ -27,7 +34,8 @@ export class EstablishmentParser {
           addressNo: this.toText(row.getCell(5).value),
           moo: this.toText(row.getCell(6).value),
           subdistrict: this.toText(row.getCell(7).value),
-          phone: this.toText(row.getCell(8).value),
+          phone: this.normalizePhone(row.getCell(8).value),
+          status: this.getEstablishmentStatus(row),
         },
 
         license: {
@@ -43,21 +51,67 @@ export class EstablishmentParser {
     return results;
   }
 
-  private parsePayments(row: any) {
-    const payments = [];
+  private parsePayments(row: Row): HazardousPayment[] {
+    const payments: HazardousPayment[] = [];
 
-    // T = column 20 = 2567
-    // W = 23 = 2570
-    for (let col = 20, year = 2567; col <= 23; col++, year++) {
-      const value = row.getCell(col).value;
+    // L = column 12 = ปี 2559
+    // ...
+    // W = column 23 = ปี 2570
+    for (let column = 12, year = 2559; column <= 23; column++, year++) {
+      const rawValue = this.toText(row.getCell(column).value);
+
+      let status: PaymentStatus;
+
+      if (rawValue === '/') {
+        status = 'PAID';
+      } else if (!rawValue) {
+        status = 'EMPTY';
+      } else {
+        // เช่น "ยกเลิก 66", "เลิกกิจการ63"
+        // ตอนนี้ยังไม่ตีความ business logic
+        status = 'NOTE';
+      }
 
       payments.push({
         year,
-        isPaid: value === '/' || value === true,
+        status,
+        rawValue,
       });
     }
 
     return payments;
+  }
+
+  private getEstablishmentStatus(row: Row): EstablishmentStatus {
+    return this.isRedRow(row) ? 'CLOSED' : 'ACTIVE';
+  }
+
+  private isRedRow(row: Row): boolean {
+    let isRed = false;
+
+    row.eachCell({ includeEmpty: true }, (cell) => {
+      const fill = cell.fill;
+
+      if (
+        fill &&
+        fill.type === 'pattern' &&
+        fill.fgColor?.argb?.toUpperCase() === 'FFFF9999'
+      ) {
+        isRed = true;
+      }
+    });
+
+    return isRed;
+  }
+
+  private normalizePhone(value: unknown): string | null {
+    const phone = this.toText(value);
+
+    if (!phone) {
+      return null;
+    }
+
+    return phone.replace(/[\s-]/g, '');
   }
 
   private toText(value: unknown): string | null {
@@ -69,12 +123,12 @@ export class EstablishmentParser {
   }
 
   private toNumber(value: unknown): number | null {
-    if (typeof value === 'number') {
-      return value;
-    }
-
     if (value === null || value === undefined || value === '') {
       return null;
+    }
+
+    if (typeof value === 'number') {
+      return value;
     }
 
     const parsed = Number(value);

@@ -1,3 +1,19 @@
+export type PaymentStatus =
+  | 'PAID'
+  | 'EMPTY'
+  | 'NOTE'
+  | 'UNKNOWN';
+
+export interface HazardousPayment {
+  year: number;
+  status: PaymentStatus;
+  rawValue: string | null;
+}
+
+export type EstablishmentStatus =
+  | 'ACTIVE'
+  | 'CLOSED';
+
 export interface HazardousImportRow {
   establishment: {
     ownerName: string | null;
@@ -7,6 +23,8 @@ export interface HazardousImportRow {
     addressNo: string | null;
     moo: string | null;
     subdistrict: string | null;
+
+    status: EstablishmentStatus;
   };
 
   license: {
@@ -15,8 +33,5 @@ export interface HazardousImportRow {
     expiryDate: string | null;
   };
 
-  payments: {
-    year: number;
-    isPaid: boolean;
-  }[];
+  payments: HazardousPayment[];
 }
