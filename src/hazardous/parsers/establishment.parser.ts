@@ -5,6 +5,7 @@ import {
   HazardousPayment,
   PaymentStatus,
 } from '../interfaces/hazardous-import-row.interface';
+import { parseExpiryDate } from '../utils/expiry-date.util';
 
 export class EstablishmentParser {
   parse(worksheet: Worksheet): HazardousImportRow[] {
@@ -20,6 +21,7 @@ export class EstablishmentParser {
 
       const ownerName = this.toText(row.getCell(2).value);
       const establishmentName = this.toText(row.getCell(3).value);
+      const expiry = parseExpiryDate(row.getCell(11).value);
 
       // ถ้าไม่มีทั้งผู้ประกอบการและชื่อสถานประกอบการ ให้ข้าม
       if (!ownerName && !establishmentName) {
@@ -41,7 +43,8 @@ export class EstablishmentParser {
         license: {
           feeAmount: this.toNumber(row.getCell(9).value),
           areaSqm: this.toNumber(row.getCell(10).value),
-          expiryDate: this.toText(row.getCell(11).value),
+          expiryDay: expiry.day,
+          expiryMonth: expiry.month,
         },
 
         payments: this.parsePayments(row),

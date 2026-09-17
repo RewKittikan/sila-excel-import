@@ -30,7 +30,8 @@ export interface HazardousImportRow {
   license: {
     feeAmount: number | null;
     areaSqm: number | null;
-    expiryDate: string | null;
+    expiryDay: number | null;
+    expiryMonth: number | null;
   };
 
   payments: HazardousPayment[];
