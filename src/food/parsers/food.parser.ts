@@ -499,7 +499,7 @@ function parseExpiryDayMonth(
   }
 
   const raw =
-    cleanText(cell.text) ??
+    safeCellText(cell) ??
     cleanText(actualValue);
 
   if (!raw) {
@@ -710,7 +710,7 @@ function textOrNull(
    * cell.text = ค่าที่ Excel แสดง
    */
   const fromText =
-    cleanText(cell.text);
+    safeCellText(cell);
 
   if (fromText) {
     return fromText;
@@ -719,6 +719,18 @@ function textOrNull(
   return cleanText(
     unwrapCellValue(cell.value),
   );
+}
+
+/**
+ * ExcelJS throws when a merged cell points to an empty master cell. Its raw
+ * value is still safe to read, so treat its display text as unavailable.
+ */
+function safeCellText(cell: Cell): string | null {
+  try {
+    return cleanText(cell.text);
+  } catch {
+    return null;
+  }
 }
 
 function unwrapCellValue(

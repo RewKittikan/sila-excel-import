@@ -1,4 +1,4 @@
-import * as ExcelJS from 'exceljs';
+import ExcelJS from 'exceljs';
 import { FoodParser } from './food.parser';
 
 describe('FoodParser', () => {

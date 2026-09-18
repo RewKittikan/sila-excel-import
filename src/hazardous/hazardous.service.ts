@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HazardousImportRow } from './interfaces/hazardous-import-row.interface.js';
 import { EstablishmentParser } from './parsers/establishment.parser.js';
-import * as ExcelJS from 'exceljs';
+import ExcelJS from 'exceljs';
 
 @Injectable()
 export class HazardousService {

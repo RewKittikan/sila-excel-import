@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as ExcelJS from 'exceljs';
+import ExcelJS from 'exceljs';
 import { FoodService } from './food.service';
 
 describe('FoodService', () => {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import * as ExcelJS from 'exceljs';
+import ExcelJS from 'exceljs';
 import { FoodImportRow } from './interfaces/food-import-row.interface.js';
 import { FoodParser } from './parsers/food.parser.js';
 
