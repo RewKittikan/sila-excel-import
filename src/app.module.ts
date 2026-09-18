@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { HazardousModule } from './hazardous/hazardous.module';
-import { FoodModule } from './food/food.module';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
+import { HazardousModule } from './hazardous/hazardous.module.js';
+import { FoodModule } from './food/food.module.js';
 
 @Module({
   imports: [HazardousModule, FoodModule],

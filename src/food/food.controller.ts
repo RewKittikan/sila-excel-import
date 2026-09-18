@@ -5,7 +5,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FoodService } from './food.service';
+import { FoodService } from './food.service.js';
 
 @Controller('food')
 export class FoodController {

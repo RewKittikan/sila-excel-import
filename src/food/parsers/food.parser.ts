@@ -4,7 +4,7 @@ import {
   FoodPayment,
   PaymentStatus,
   EstablishmentStatus,
-} from '../interfaces/food-import-row.interface';
+} from '../interfaces/food-import-row.interface.js';
 
 const FIRST_DATA_ROW = 4;
 

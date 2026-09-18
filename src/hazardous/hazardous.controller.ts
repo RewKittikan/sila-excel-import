@@ -1,6 +1,6 @@
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { HazardousService } from './hazardous.service';
+import { HazardousService } from './hazardous.service.js';
 
 @Controller('hazardous')
 export class HazardousController {

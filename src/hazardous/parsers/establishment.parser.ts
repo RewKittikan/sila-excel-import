@@ -4,8 +4,8 @@ import {
   HazardousImportRow,
   HazardousPayment,
   PaymentStatus,
-} from '../interfaces/hazardous-import-row.interface';
-import { parseExpiryDate } from '../utils/expiry-date.util';
+} from '../interfaces/hazardous-import-row.interface.js';
+import { parseExpiryDate } from '../utils/expiry-date.util.js';
 
 export class EstablishmentParser {
   parse(worksheet: Worksheet): HazardousImportRow[] {

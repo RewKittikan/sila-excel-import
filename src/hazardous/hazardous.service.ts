@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { HazardousImportRow } from './interfaces/hazardous-import-row.interface';
-import { EstablishmentParser } from './parsers/establishment.parser';
+import { HazardousImportRow } from './interfaces/hazardous-import-row.interface.js';
+import { EstablishmentParser } from './parsers/establishment.parser.js';
 import * as ExcelJS from 'exceljs';
 
 @Injectable()

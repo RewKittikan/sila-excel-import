@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
-import { FoodImportRow } from './interfaces/food-import-row.interface';
-import { FoodParser } from './parsers/food.parser';
+import { FoodImportRow } from './interfaces/food-import-row.interface.js';
+import { FoodParser } from './parsers/food.parser.js';
 
 @Injectable()
 export class FoodService {
