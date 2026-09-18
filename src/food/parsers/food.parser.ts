@@ -877,3 +877,9 @@ function isEmptyFoodRow(
     !moo
   );
 }
+
+export class FoodParser {
+  parse(worksheet: Worksheet): FoodImportRow[] {
+    return parseFoodWorksheet(worksheet);
+  }
+}
